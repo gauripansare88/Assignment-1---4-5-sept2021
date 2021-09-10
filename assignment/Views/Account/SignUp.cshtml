@@ -1,0 +1,62 @@
+﻿@model User;
+    <script type="text/javascript">
+      
+        $(document).on('change', '#country', function () {
+            $("#city").empty();
+            signUp.appendoptions($(this).val())
+        });
+
+        var signUp = {
+            getCities: function (country) {
+                var countryjason = {
+                    India: ["Mumbai", "Pune", "Delhi"],
+                    USA: ["Newyork", "Washington", "Arlington"],
+                    UK: ["London", "Nottingham", "Birmingham"]
+                };
+                if (country == "India")
+                    return countryjason.India;
+                if (country == "USA")
+                    return countryjason.USA;
+                if (country == "UK")
+                    return countryjason.UK;
+
+            },
+            appendoptions: function (country) {
+                cityArray = this.getCities(country)
+                jQuery.each(cityArray, function (i, val) {
+                    $("#city").append('<option value=' + val + '>' +
+                        val
+                        + '</option>');
+                });
+            }
+        };
+        
+    </script>
+    <form>
+        <div>
+            Name : <input type="text" asp-for="Name" minlength="3"/>
+        </div>
+        <div>
+            Email: <input type="text" asp-for="Email" />
+        </div>
+        <div>
+            Gender: <input type="text" asp-for="gender" />
+        </div>
+        <div>
+            Country : <select id="country" asp-for="Country">
+                <option>India</option>
+                <option>USA</option>
+                <option>UK</option>
+            </select>
+
+        </div>
+        <div>
+            City : <select id="city" asp-for="City" />
+        </div>
+        <div>
+            <input type="button" value="Login" />
+        </div>
+        <div>
+            <input type="button" value="Reset" />
+        </div>
+    </form>

@@ -1,0 +1,131 @@
+﻿@model assignment.Models.User
+
+@{
+    ViewData["Title"] = "Signup1";
+
+
+}
+
+<h1>Signup1</h1>
+
+
+<hr />
+<script type="text/javascript">
+    $(document).ready(function () {
+        getCitits("India")
+    })
+
+    $(document).on('click', "#Reset", function () {
+        //console.log("clear");
+        $(".text-danger").empty();
+        $("#Countries").val("India");
+        getCitits("India");
+        $("#gender").select("M")
+    });
+
+    function getCitits(country) {
+        $("#city").empty();
+        $.get("/Account/GetCities", { country: country }, function (data) {
+            var v = "";
+            $.each(data, function (i, v1) {
+                v += "<option value=" + v1 + ">" + v1 + "</option>";
+            });
+            $("#city").html(v);
+        });
+    }
+
+    $(document).on('change', '#Countries', function () {
+        var ct = $(this).val();
+        getCitits(ct);
+    });
+</script>
+@{ if (ViewBag.IsSuccess != null && ViewBag.IsSuccess == true)
+
+    {
+        <div>You have signed up successfully</div>
+    }
+    else
+    {
+
+        <div class="row">
+            <div class="col-md-4">
+                <form asp-action="Signup1">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <label asp-for="Name" class="control-label"></label>
+                        <input asp-for="Name" class="form-control" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Email" class="control-label"></label>
+                        <input asp-for="Email" class="form-control" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Password" class="control-label"></label>
+                        <input asp-for="Password" class="form-control" />
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="ConfirmPassword" class="control-label"></label>
+                        <input asp-for="ConfirmPassword" class="form-control" />
+                        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Country" class="control-label"></label>
+                        <select class="form-control" asp-for="Country" id="Countries">
+                            @foreach (var country in ViewBag.Countries)
+                            {
+                                <option value=@country.Name>
+                                    @country.Name
+                                </option>
+                            }
+
+                        </select>
+                        <span asp-validation-for="Country" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="City" class="control-label"></label>
+                        <select id="city" asp-for="City" class="form-control">
+                        </select>
+                        <span asp-validation-for="City" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="gender" class="control-label"></label>
+                        <select class="form-control" asp-for="gender" id="gender">
+                            <option value="M">
+                                Male
+                            </option>
+                            <option value="F">
+                                Female
+                            </option>
+                            <option value="T">
+                                Transgender
+                            </option>
+                        </select>
+                        <span asp-validation-for="gender" class="text-danger"></span>
+                    </div>
+                    <div class="form-group form-check">
+                        <label class="form-check-label">
+                            <input class="form-check-input" asp-for="Terms" /> @Html.DisplayNameFor(model => model.Terms)
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Signup" class="btn btn-primary" />
+                        <input type="reset" value="Reset" id="Reset" class="btn btn-primary" />
+                    </div>
+                </form>
+            </div>
+     </div>
+    }
+
+}
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
